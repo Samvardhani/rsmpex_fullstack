@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var mdb = require('mongoose');
-var user = require('./models/user'); 
+var admin = require('./models/admin'); 
 app = express();
 const PORT = 9001;
 
@@ -31,43 +31,34 @@ app.get('/html2', (req, res) => {
     res.sendFile(path.join(__dirname, 'index2.html'));
 });
 
-app.post('/signup', (req, res) => {
+app.post('/signupadmin', (req, res) => {
     console.log(req.body); 
 
     var { firstname, lastname, email } = req.body;
     console.log(firstname, lastname, email);
 
     try {
-        var newUser = new user({
+        var newadmin = new admin({
             firstname: firstname,
             lastname: lastname,
             email: email
         });
 
-        newUser.save()
+        newadmin.save()
             .then(() => {
-                console.log("User added successfully");
-                res.status(200).send("User added successfully");
+                console.log("admin added successfully");
+                res.status(200).send("admin added successfully");
             })
             .catch(err => {
-                console.log("Error saving user:", err);
-                res.status(500).send("Error saving user");
+                console.log("Error saving admin:", err);
+                res.status(500).send("Error saving admin");
             });
     } catch (err) {
         console.log("Error", err);
         res.status(500).send("Error processing request");
     }
 });
-app.get('/getsignup',async(req,res)=>{
-    try{
-       var allSignUpRecords = await user.find()
-       res.json(allSignUpRecords);
-       console.log("All data are fetched")
-    }
-    catch(err){
-        console.log("Cant able to read the records.")
-    }
-})
+
 
 app.listen(PORT, () => {
     console.log('Backend Server Started');
